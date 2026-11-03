@@ -34,7 +34,7 @@ const CLIENTS = [
 { photo: "images/clients/client-17.jpg" },
 { photo: "images/clients/client-18.jpg" },
 { photo: "images/clients/client-19.jpg" },
-{ photo: "images/clients/client-20.jpg" },
+
 { photo: "images/clients/client-21.jpg" },
 { photo: "images/clients/client-22.jpg" },
 { photo: "images/clients/client-23.jpg" },
