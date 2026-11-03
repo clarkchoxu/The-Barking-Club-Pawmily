@@ -1,0 +1,913 @@
+/* ==========================================================
+   Happy Tails – main stylesheet
+   Sections: 1 Variables · 2 Base · 3 Layout · 4 Header/Nav
+             5 Buttons · 6 Hero · 7 Dog cards · 8 Tags
+             9 Filters · 10 Modal gallery · 11 About
+             12 Contact form · 13 Footer · 14 Larger screens
+   ========================================================== */
+
+/* 1. VARIABLES ---------------------------------------------- */
+:root {
+  --bg: #f6fafb;
+  --surface: #ffffff;
+  --tint: #e6f2f6;
+  --line: #d3e2e8;
+  --ink: #17303f;
+  --ink-soft: #46606f;
+  --brand: #17708c;
+  --brand-dark: #0f5368;
+  --sun: #f5b93a;
+  --sun-soft: #fff3d6;
+
+  --tag-best-bg: #ffe3a3;
+  --tag-best-ink: #5a3d00;
+  --tag-rec-bg: #cdebd8;
+  --tag-rec-ink: #14502e;
+  --tag-pup-bg: #fbd9e4;
+  --tag-pup-ink: #7a1f43;
+
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", Verdana, sans-serif;
+  --font-head: "Fraunces", Georgia, "Times New Roman", serif;
+
+  --radius: 16px;
+  --radius-small: 10px;
+  --tap: 3.25rem; /* minimum button height, easy to hit with a thumb */
+  --shadow: 0 2px 10px rgba(23, 48, 63, 0.08);
+}
+
+/* 2. BASE --------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 112.5%; /* 18px base so text is comfortable to read */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-head);
+  line-height: 1.2;
+  margin: 0 0 0.6rem;
+  color: var(--ink);
+}
+
+h1 { font-size: 2.1rem; }
+h2 { font-size: 1.65rem; }
+h3 { font-size: 1.3rem; }
+
+p {
+  margin: 0 0 1rem;
+  max-width: 62ch;
+}
+
+a {
+  color: var(--brand-dark);
+}
+
+:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--ink);
+  color: #fff;
+  padding: 0.75rem 1rem;
+  z-index: 100;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+/* 3. LAYOUT ------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 0 1.1rem;
+}
+
+.section {
+  padding: 2.5rem 0;
+}
+
+.section--tint {
+  background: var(--tint);
+}
+
+.section__intro {
+  color: var(--ink-soft);
+  margin-bottom: 1.5rem;
+}
+
+.page-title {
+  background: var(--tint);
+  padding: 2rem 0 1.6rem;
+  border-bottom: 1px solid var(--line);
+}
+.page-title p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* 4. HEADER & NAV ------------------------------------------- */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 4.2rem;
+  gap: 1rem;
+}
+
+.logo {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.45rem;
+  color: var(--brand-dark);
+  text-decoration: none;
+}
+
+.nav-toggle {
+  min-height: 2.9rem;
+  padding: 0 1.1rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--brand-dark);
+  background: var(--tint);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-small);
+  cursor: pointer;
+}
+
+.site-nav {
+  display: none;
+  border-top: 1px solid var(--line);
+}
+.site-nav.is-open {
+  display: block;
+}
+
+.site-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem 0 0.8rem;
+}
+
+.site-nav a {
+  display: block;
+  padding: 0.85rem 0.25rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--brand-dark);
+  box-shadow: inset 4px 0 0 var(--sun);
+  padding-left: 0.9rem;
+}
+
+/* 5. BUTTONS ------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  padding: 0 1.5rem;
+  font: inherit;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none;
+  color: #fff;
+  background: var(--brand);
+  border: 2px solid var(--brand);
+  border-radius: var(--radius-small);
+  cursor: pointer;
+}
+.btn:hover {
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+.btn--light {
+  color: var(--brand-dark);
+  background: var(--surface);
+}
+.btn--light:hover {
+  color: #fff;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+/* 6. HERO --------------------------------------------------- */
+.hero {
+  padding: 2rem 0 2.5rem;
+  background: linear-gradient(180deg, var(--sun-soft) 0%, var(--bg) 100%);
+}
+
+.hero__grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.hero h1 {
+  font-size: 2.3rem;
+}
+
+.hero__lead {
+  font-size: 1.2rem;
+  color: var(--ink-soft);
+}
+
+.hero .photo {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+}
+
+.points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.points li {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+}
+.points h3 {
+  margin-bottom: 0.3rem;
+}
+.points p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* 7. DOG CARDS & PHOTO PLACEHOLDERS ------------------------- */
+
+/* Every photo box shows a paw + "Photo coming soon" until a real
+   image loads on top of it. */
+.photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  background: var(--tint);
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+}
+.photo::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 3.4rem;
+  height: 3.4rem;
+  transform: translate(-50%, -50%);
+  opacity: 0.55;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='%2317708c'%3E%3Cellipse cx='32' cy='42' rx='14' ry='11'/%3E%3Cellipse cx='14' cy='28' rx='6' ry='8'/%3E%3Cellipse cx='26' cy='16' rx='6' ry='8'/%3E%3Cellipse cx='38' cy='16' rx='6' ry='8'/%3E%3Cellipse cx='50' cy='28' rx='6' ry='8'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.photo::after {
+  content: "Photo coming soon";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 58%;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+.photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%; /* keeps heads in view when a photo is cropped */
+  z-index: 1;
+}
+.photo img[hidden] {
+  display: none;
+}
+
+.dog-grid {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.dog-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dog-card .photo {
+  aspect-ratio: 4 / 3;
+  cursor: pointer;
+}
+
+.dog-card__tags {
+  position: absolute;
+  left: 0.6rem;
+  top: 0.6rem;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  pointer-events: none;
+}
+
+.dog-card__body {
+  padding: 1.1rem 1.2rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dog-card__facts {
+  color: var(--ink-soft);
+  margin: 0 0 0.6rem;
+}
+
+.dog-card__text {
+  margin-bottom: 1rem;
+}
+
+.dog-card .btn {
+  margin-top: auto;
+}
+
+.empty-note {
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px dashed var(--brand);
+  border-radius: var(--radius);
+}
+
+/* 8. TAGS --------------------------------------------------- */
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 999px;
+}
+.tag--best {
+  background: var(--tag-best-bg);
+  color: var(--tag-best-ink);
+}
+.tag--rec {
+  background: var(--tag-rec-bg);
+  color: var(--tag-rec-ink);
+}
+.tag--puppy {
+  background: var(--tag-pup-bg);
+  color: var(--tag-pup-ink);
+}
+
+.tag--home {
+  background: var(--tint);
+  color: var(--brand-dark);
+}
+
+/* Client cards reuse the dog card look */
+
+/* 9. FILTERS ------------------------------------------------ */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.filter-btn {
+  min-height: 3rem;
+  padding: 0 1.2rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--brand-dark);
+  background: var(--surface);
+  border: 2px solid var(--brand);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.filter-btn[aria-pressed="true"] {
+  color: #fff;
+  background: var(--brand);
+}
+
+.result-count {
+  color: var(--ink-soft);
+  margin-bottom: 1.2rem;
+}
+
+/* 10. MODAL GALLERY ----------------------------------------- */
+body.modal-open {
+  overflow: hidden;
+}
+
+.dog-modal {
+  width: min(100% - 1rem, 40rem);
+  max-height: calc(100dvh - 1rem);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  overflow-y: auto;
+}
+.dog-modal::backdrop {
+  background: rgba(23, 48, 63, 0.6);
+}
+
+.modal__top {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.6rem 0.8rem 0;
+}
+
+.modal__close {
+  min-height: 2.9rem;
+  padding: 0 1.1rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--tint);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-small);
+  cursor: pointer;
+}
+
+.modal__stage {
+  position: relative;
+  margin: 0.6rem 0.8rem 0;
+}
+/* Gallery photo: shown whole (never cropped). Tall and wide photos both
+   fit inside the box; the empty space around them is a soft background. */
+.modal__stage .photo {
+  height: min(62dvh, 30rem);
+  border-radius: var(--radius-small);
+  background: #dbe9ef;
+}
+.modal__stage .photo img {
+  object-fit: contain;
+  object-position: center;
+}
+
+.modal__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 3.2rem;
+  height: 3.2rem;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid var(--brand);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.modal__nav--prev { left: 0.5rem; }
+.modal__nav--next { right: 0.5rem; }
+
+.modal__counter {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  z-index: 3;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(23, 48, 63, 0.8);
+  border-radius: 999px;
+}
+
+.modal__thumbs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.6rem 0.8rem 0;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+}
+
+.thumb {
+  flex: 0 0 4.8rem;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 3px solid transparent;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  overflow: hidden;
+  background: var(--tint);
+}
+.thumb[aria-current="true"] {
+  border-color: var(--brand);
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.thumb img[hidden] {
+  display: none;
+}
+
+.modal__info {
+  padding: 1rem 1.2rem 1.4rem;
+}
+
+.modal__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Status badge (card + gallery) */
+.dog-card__status {
+  display: inline-block;
+  align-self: flex-start;
+  margin: 0 0 0.7rem;
+  padding: 0.2rem 0.8rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  background: var(--sun-soft);
+  border: 1px solid var(--sun);
+  border-radius: 999px;
+}
+.modal__breed {
+  color: var(--ink-soft);
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+.modal__breed .dog-card__status {
+  margin: 0 0 0 0.4rem;
+}
+
+/* Highlights and care list in the gallery */
+.highlights {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+.highlights[hidden],
+.care[hidden] {
+  display: none;
+}
+.highlights li {
+  padding: 0.5rem 0.9rem;
+  background: var(--tint);
+  border-left: 4px solid var(--sun);
+  border-radius: var(--radius-small);
+}
+.highlights strong,
+.highlights span {
+  display: block;
+}
+.highlights span {
+  color: var(--ink-soft);
+}
+
+.care {
+  list-style: none;
+  margin: 0 0 1.2rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.care li {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--tag-rec-ink);
+  background: var(--tag-rec-bg);
+  border-radius: 999px;
+}
+.care li::before {
+  content: "\2713  ";
+}
+
+/* 11. ABOUT ------------------------------------------------- */
+.team {
+  display: grid;
+  gap: 1.2rem;
+}
+.team__member {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.team__member .photo {
+  aspect-ratio: 4 / 3;
+}
+.team__member div.team__text {
+  padding: 1rem 1.2rem 1.2rem;
+}
+.team__member p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* 12. CONTACT FORM ------------------------------------------ */
+.contact-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.info-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+}
+.info-box dl {
+  margin: 0;
+}
+.info-box dt {
+  font-weight: 700;
+  margin-top: 0.8rem;
+}
+.info-box dt:first-child {
+  margin-top: 0;
+}
+.info-box dd {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.form-field {
+  margin-bottom: 1.2rem;
+}
+
+.form-field label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.form-field .hint {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0.6rem 0.9rem;
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid #8fa8b5;
+  border-radius: var(--radius-small);
+}
+.form-field textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.form-field .error {
+  display: none;
+  margin: 0.35rem 0 0;
+  color: #a51f1f;
+  font-weight: 700;
+}
+.form-field.has-error input,
+.form-field.has-error textarea {
+  border-color: #a51f1f;
+}
+.form-field.has-error .error {
+  display: block;
+}
+
+.form-success {
+  padding: 1.2rem;
+  background: var(--tag-rec-bg);
+  color: var(--tag-rec-ink);
+  border-radius: var(--radius);
+  font-weight: 700;
+}
+.form-success[hidden] {
+  display: none;
+}
+
+/* 13. FOOTER ------------------------------------------------ */
+.site-footer {
+  margin-top: 1rem;
+  padding: 2rem 0 2.5rem;
+  background: var(--ink);
+  color: #e8f1f5;
+}
+.site-footer a {
+  color: #fff;
+}
+.site-footer__grid {
+  display: grid;
+  gap: 1.2rem;
+}
+.site-footer h2 {
+  color: #fff;
+  font-size: 1.2rem;
+}
+.site-footer p {
+  margin: 0 0 0.3rem;
+}
+.site-footer__small {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #b9cdd7;
+}
+
+/* 14. LARGER SCREENS ---------------------------------------- */
+@media (min-width: 48rem) {
+  h1 { font-size: 2.7rem; }
+  h2 { font-size: 2rem; }
+
+  .section { padding: 3.5rem 0; }
+
+  .nav-toggle { display: none; }
+
+  .site-nav,
+  .site-nav.is-open {
+    display: block;
+    border-top: 0;
+  }
+  .site-nav ul {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0;
+  }
+  .site-nav a {
+    border-bottom: 0;
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--radius-small);
+  }
+  .site-nav a[aria-current="page"] {
+    box-shadow: none;
+    padding-left: 0.9rem;
+    background: var(--sun-soft);
+  }
+
+  .hero__grid {
+    grid-template-columns: 1.1fr 1fr;
+    align-items: center;
+    gap: 2.5rem;
+  }
+  .hero h1 { font-size: 3rem; }
+
+  .btn-row { flex-direction: row; }
+
+  .points { grid-template-columns: repeat(3, 1fr); }
+
+  .dog-grid { grid-template-columns: repeat(2, 1fr); }
+  .team { grid-template-columns: repeat(3, 1fr); }
+
+  .contact-grid { grid-template-columns: 1fr 1.3fr; align-items: start; }
+
+  .site-footer__grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 64rem) {
+  .dog-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* 15. CLIENT PHOTO GALLERY ---------------------------------- */
+.client-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+.client-card {
+  background: var(--surface);
+  border: 3px solid var(--sun);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.client-card .photo {
+  aspect-ratio: 4 / 5;
+}
+
+/* Small heart badge in the corner of each photo */
+.client-card__heart {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.2rem;
+  color: #fff;
+  background: #d6457a;
+  border-radius: 50%;
+  box-shadow: var(--shadow);
+}
+
+@media (min-width: 48rem) {
+  .client-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.4rem;
+  }
+}
+
+/* 16. PAGER ------------------------------------------------- */
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.6rem;
+}
+.pager[hidden] {
+  display: none;
+}
+.pager__status {
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.pager .btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.pager .btn:disabled:hover {
+  color: var(--brand-dark);
+  background: var(--surface);
+  border-color: var(--brand);
+}
+.pager .btn:not(.btn--light):disabled:hover {
+  color: #fff;
+  background: var(--brand);
+}
+
+/* Scroll so the grid isn't hidden under the sticky header */
+#client-grid {
+  scroll-margin-top: 5.5rem;
+}
