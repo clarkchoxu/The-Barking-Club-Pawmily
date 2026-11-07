@@ -4,11 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact Us – The Barking Club Pawmily</title>
-  <meta name="description" content="Contact The Barking Club Pawmily through Facebook, phone, or text about our available dogs.">
+  <meta name="description" content="Send an inquiry to The Barking Club Pawmily, or contact us through Facebook, phone, or text about our available dogs.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Page-specific touches (the rest comes from styles.css) */
+    .contact-stack { display: grid; gap: 1.5rem; }
+    .info-box h2 { font-size: 1.35rem; }
+    .info-box .contact-detail { font-size: 1.2rem; font-weight: 700; margin-bottom: 0; }
+    .info-box .btn-row { margin-top: 1rem; }
+    .info-box--form { padding: 1.5rem 1.3rem; box-shadow: var(--shadow); }
+    .form-note { font-size: 0.95rem; color: var(--ink-soft); margin: 0.9rem 0 0; }
+    /* Spam trap: invisible to real people */
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    #form-success:focus { outline: 3px solid var(--sun); outline-offset: 3px; }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -35,30 +47,92 @@
     <div class="page-title">
       <div class="container">
         <h1>Contact us</h1>
-        <p>Have a question about one of our dogs? Choose the way that works best for you.</p>
+        <p>Have a question about one of our dogs? Send us a message, or reach us the way that works best for you.</p>
       </div>
     </div>
 
-    <section class="section" aria-label="Contact options">
+    <section class="section" aria-label="Contact us">
       <div class="container contact-grid">
-        <section class="info-box" aria-labelledby="facebook-heading">
-          <h2 id="facebook-heading">Message us on Facebook</h2>
-          <p>Visit our official Facebook page to ask about available dogs, adoption details, or arranging a visit.</p>
-          <p><a href="https://www.facebook.com/thebarkingclub77" target="_blank" rel="noopener noreferrer">The Barking Club Pawmily</a></p>
-          <div class="btn-row">
-            <a class="btn btn--block" href="https://www.facebook.com/thebarkingclub77" target="_blank" rel="noopener noreferrer">Open our Facebook page</a>
+
+        <!-- Left: quick ways to reach us -->
+        <div class="contact-stack">
+          <section class="info-box" aria-labelledby="phone-heading">
+            <h2 id="phone-heading">Call or text us</h2>
+            <p class="contact-detail"><a href="tel:+639055591764">0905 559 1764</a></p>
+            <div class="btn-row">
+              <a class="btn btn--block" href="tel:+639055591764">Call us</a>
+              <a class="btn btn--block btn--light" href="sms:+639055591764">Send a text</a>
+            </div>
+          </section>
+
+          <section class="info-box" aria-labelledby="facebook-heading">
+            <h2 id="facebook-heading">Message us on Facebook</h2>
+            <p>Ask about available dogs, adoption details, or arranging a visit.</p>
+            <div class="btn-row">
+              <a class="btn btn--block btn--light" href="https://www.facebook.com/thebarkingclub77" target="_blank" rel="noopener noreferrer">Open our Facebook page</a>
+            </div>
+          </section>
+
+          <section class="info-box" aria-labelledby="visit-heading">
+            <h2 id="visit-heading">Visit us</h2>
+            <p>Bocaue, Bulacan, Philippines</p>
+            <p>Please arrange visits in advance.</p>
+          </section>
+        </div>
+
+        <!-- Right: inquiry form -->
+        <section class="info-box info-box--form" aria-labelledby="inquiry-heading">
+          <h2 id="inquiry-heading">Send us an inquiry</h2>
+          <p class="section__intro">Fill this in and we will reply as soon as we can.</p>
+
+          <form id="contact-form" novalidate>
+            <div class="form-field">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" autocomplete="name">
+              <p class="error" role="alert"></p>
+            </div>
+
+            <div class="form-field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email">
+              <p class="error" role="alert"></p>
+            </div>
+
+            <div class="form-field">
+              <label for="phone">Phone <span class="hint">(optional if you gave an email)</span></label>
+              <input type="tel" id="phone" name="phone" autocomplete="tel">
+              <p class="error" role="alert"></p>
+            </div>
+
+            <div class="form-field">
+              <label for="dog">Which dog are you asking about?</label>
+              <select id="dog" name="dog">
+                <option value="">Not sure yet / general question</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5"></textarea>
+              <p class="error" role="alert"></p>
+            </div>
+
+            <!-- Spam trap: real people never see or fill this -->
+            <div class="hp" aria-hidden="true">
+              <label for="website">Leave this empty</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <button type="submit" class="btn btn--block">Send inquiry</button>
+            <p class="form-note">We only use your details to reply to your inquiry.</p>
+          </form>
+
+          <div id="form-success" class="form-success" hidden tabindex="-1">
+            <h2>Thank you!</h2>
+            <p>We got your message and will reply as soon as we can. You can also call or text us at <a href="tel:+639055591764">0905 559 1764</a>.</p>
           </div>
         </section>
 
-        <section class="info-box" aria-labelledby="phone-heading">
-          <h2 id="phone-heading">Call or text us</h2>
-          <p>Contact us directly at:</p>
-          <p><a href="tel:+639055591764">0905 559 1764</a></p>
-          <div class="btn-row">
-            <a class="btn btn--block" href="tel:+639055591764">Call us</a>
-            <a class="btn btn--block" href="sms:+639055591764">Send a text</a>
-          </div>
-        </section>
       </div>
     </section>
   </main>
@@ -86,5 +160,7 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/dogs-data.js"></script>
+  <script type="module" src="js/contact.js"></script>
 </body>
 </html>
