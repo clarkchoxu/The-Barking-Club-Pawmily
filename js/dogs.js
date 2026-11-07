@@ -1,14 +1,24 @@
 /* ==========================================================
    dogs.js – shows the dog cards, the filter buttons and the
    photo gallery that opens when a dog is tapped.
-   Needs dogs-data.js loaded first.
+
+   Dogs are loaded from Firebase (Firestore). If Firebase can't
+   be reached, it falls back to dogs-data.js.
+
+   Load it as a module, after dogs-data.js:
+     <script src="js/dogs-data.js"></script>
+     <script type="module" src="js/dogs.js"></script>
 
    Works on any page that has an element like:
      <div id="dog-grid"></div>
    Optional attributes on that element:
-     data-filter="best-seller"   only show dogs with that tag
+     data-filter="recommended"   only show dogs with that tag
      data-limit="3"              show at most 3 dogs
    ========================================================== */
+
+import { db } from "./firebase-config.js";
+import { collection, getDocs }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 (function () {
   "use strict";
@@ -22,10 +32,19 @@
   var grid = document.getElementById("dog-grid");
   if (!grid) return;
 
+  var dogs = []; // filled in by loadDogs()
+
   /* ---------- small helpers ---------- */
 
+  // Makes text safe to put inside HTML
+  function esc(text) {
+    return String(text == null ? "" : text).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
   function tagsHtml(tags) {
-    return tags
+    return (tags || [])
       .map(function (t) {
         var tag = TAGS[t];
         return tag ? '<span class="tag ' + tag.css + '">' + tag.label + "</span>" : "";
@@ -52,9 +71,43 @@
   }
 
   function findDog(id) {
-    return DOGS.filter(function (d) {
+    return dogs.filter(function (d) {
       return d.id === id;
     })[0];
+  }
+
+  // Makes sure every dog has the lists the page expects
+  function normalise(d) {
+    d.tags = d.tags || [];
+    d.images = d.images || [];
+    d.highlights = d.highlights || [];
+    d.care = d.care || [];
+    return d;
+  }
+
+  function orderOf(d) {
+    return typeof d.order === "number" ? d.order : 0;
+  }
+
+  /* ---------- loading from Firebase ---------- */
+
+  async function loadDogs() {
+    grid.innerHTML = '<p class="empty-note">Loading dogs...</p>';
+    try {
+      var snap = await getDocs(collection(db, "dogs"));
+      dogs = snap.docs
+        .map(function (d) {
+          return normalise(Object.assign({ id: d.id }, d.data()));
+        })
+        .sort(function (a, b) {
+          return orderOf(a) - orderOf(b);
+        });
+    } catch (err) {
+      // Could not reach Firebase: use the old file so the site still works
+      console.error("Could not load dogs from Firebase, using dogs-data.js", err);
+      dogs = typeof DOGS !== "undefined" ? DOGS.map(normalise) : [];
+    }
+    render(currentFilter);
   }
 
   /* ---------- cards ---------- */
@@ -62,30 +115,33 @@
   function cardHtml(dog) {
     return (
       '<article class="dog-card">' +
-      '<button type="button" class="photo" data-open="' + dog.id + '" aria-label="See more photos of ' + dog.name + '">' +
-      '<img data-src="' + dog.images[0] + '" data-alt="' + dog.name + ', main photo" alt="">' +
+      '<button type="button" class="photo" data-open="' + esc(dog.id) + '" aria-label="See more photos of ' + esc(dog.name) + '">' +
+      '<img data-src="' + esc(dog.images[0] || "") + '" data-alt="' + esc(dog.name) + ', main photo" alt="">' +
       '<span class="dog-card__tags">' + tagsHtml(dog.tags) + "</span>" +
       "</button>" +
       '<div class="dog-card__body">' +
-      "<h3>" + dog.name + "</h3>" +
-      '<p class="dog-card__facts">' + dog.breed + "</p>" +
-      (dog.status ? '<p class="dog-card__status">' + dog.status + "</p>" : "") +
-      '<p class="dog-card__text">' + dog.description + "</p>" +
-      '<button type="button" class="btn" data-open="' + dog.id + '">See photos &amp; details</button>' +
+      "<h3>" + esc(dog.name) + "</h3>" +
+      '<p class="dog-card__facts">' + esc(dog.breed) + "</p>" +
+      (dog.status ? '<p class="dog-card__status">' + esc(dog.status) + "</p>" : "") +
+      '<p class="dog-card__text">' + esc(dog.description) + "</p>" +
+      '<button type="button" class="btn" data-open="' + esc(dog.id) + '">See photos &amp; details</button>' +
       "</div>" +
       "</article>"
     );
   }
 
   function visibleDogs(filter) {
-    var list = DOGS.filter(function (d) {
+    var list = dogs.filter(function (d) {
       return filter === "all" || d.tags.indexOf(filter) !== -1;
     });
     var limit = parseInt(grid.dataset.limit, 10);
     return limit ? list.slice(0, limit) : list;
   }
 
+  var currentFilter = grid.dataset.filter || "all";
+
   function render(filter) {
+    currentFilter = filter;
     var list = visibleDogs(filter);
     if (list.length === 0) {
       grid.innerHTML = '<p class="empty-note">No dogs in this group right now. Please check back soon, or contact us and we will let you know when new dogs arrive.</p>';
@@ -143,6 +199,7 @@
 
   function showPhoto(i) {
     var total = current.images.length;
+    if (!total) return;
     index = (i + total) % total;
     showImage(
       document.getElementById("modal-img"),
@@ -164,22 +221,22 @@
     document.getElementById("modal-tags").innerHTML = tagsHtml(current.tags);
     document.getElementById("modal-desc").textContent = current.description;
     document.getElementById("modal-breed").innerHTML =
-      current.breed + (current.status ? ' <span class="dog-card__status">' + current.status + "</span>" : "");
+      esc(current.breed) + (current.status ? ' <span class="dog-card__status">' + esc(current.status) + "</span>" : "");
 
-    var highlights = current.highlights || [];
+    var highlights = current.highlights;
     var hl = document.getElementById("modal-highlights");
     hl.innerHTML = highlights
       .map(function (h) {
-        return "<li><strong>" + h.title + "</strong>" + (h.text ? "<span>" + h.text + "</span>" : "") + "</li>";
+        return "<li><strong>" + esc(h.title) + "</strong>" + (h.text ? "<span>" + esc(h.text) + "</span>" : "") + "</li>";
       })
       .join("");
     hl.hidden = highlights.length === 0;
 
-    var care = current.care || [];
+    var care = current.care;
     var cl = document.getElementById("modal-care");
     cl.innerHTML = care
       .map(function (c) {
-        return "<li>" + c + "</li>";
+        return "<li>" + esc(c) + "</li>";
       })
       .join("");
     cl.hidden = care.length === 0;
@@ -191,7 +248,7 @@
       .map(function (src, n) {
         return (
           '<button type="button" class="thumb" data-thumb="' + n + '" aria-label="Show photo ' + (n + 1) + '">' +
-          '<img data-src="' + src + '" alt="">' +
+          '<img data-src="' + esc(src) + '" alt="">' +
           "</button>"
         );
       })
@@ -248,5 +305,5 @@
   });
 
   /* ---------- go ---------- */
-  render(grid.dataset.filter || "all");
+  loadDogs();
 })();

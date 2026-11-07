@@ -1,12 +1,17 @@
 /* ==========================================================
    contact.js – contact form: fills the "dog" dropdown,
-   checks the fields, and shows a thank-you message.
+   checks the fields, saves the inquiry to Firebase Firestore,
+   and shows a thank-you message.
 
-   NOTE: this page has no server yet, so nothing is actually
-   sent. To receive messages, connect the form to a service
-   (for example Formspree or Netlify Forms) at the spot marked
-   "SEND THE MESSAGE HERE" below.
+   Needs (in this order, in contact.html):
+     <script src="js/main.js"></script>
+     <script src="js/dogs-data.js"></script>
+     <script type="module" src="js/contact.js"></script>
    ========================================================== */
+
+import { db } from "./firebase-config.js";
+import { collection, addDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 (function () {
   "use strict";
@@ -71,7 +76,8 @@
     return ok;
   }
 
-  form.addEventListener("submit", function (e) {
+  /* ---------- submit: save to Firestore ---------- */
+  form.addEventListener("submit", async function (e) {
     e.preventDefault();
     if (!validate()) {
       var firstError = form.querySelector(".has-error input, .has-error textarea");
@@ -79,18 +85,37 @@
       return;
     }
 
-    /* ===== SEND THE MESSAGE HERE =====
-       Example with fetch (replace the URL with your own form service):
-       fetch("https://formspree.io/f/your-id", {
-         method: "POST",
-         body: new FormData(form),
-         headers: { Accept: "application/json" }
-       });
-    ================================== */
-
+    var button = form.querySelector('button[type="submit"]');
     var success = document.getElementById("form-success");
-    form.hidden = true;
-    success.hidden = false;
-    success.focus();
+
+    // Spam trap: bots fill the hidden field. Pretend it worked, save nothing.
+    if (form.elements.website && form.elements.website.value) {
+      form.hidden = true;
+      success.hidden = false;
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Sending...";
+
+    try {
+      await addDoc(collection(db, "inquiries"), {
+        name: form.elements.name.value.trim(),
+        email: form.elements.email.value.trim(),
+        phone: form.elements.phone.value.trim(),
+        dog: form.elements.dog.value,
+        message: form.elements.message.value.trim(),
+        status: "new",
+        createdAt: serverTimestamp()
+      });
+      form.hidden = true;
+      success.hidden = false;
+      success.focus();
+    } catch (err) {
+      console.error(err);
+      button.disabled = false;
+      button.textContent = "Send inquiry";
+      alert("Sorry, your message could not be sent. Please call or text us at 0905 559 1764.");
+    }
   });
 })();
